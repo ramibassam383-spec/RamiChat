@@ -8,26 +8,36 @@ on:
 jobs:
   build:
     name: Build Android APK
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
 
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      - name: Set up ccache
-        uses: hendrikmuhs/ccache-action@v1.2
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
         with:
-          key: ${{ runner.os }}-buildozer
+          distribution: temurin
+          java-version: "17"
+
+      - name: Install system dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git zip unzip autoconf libtool pkg-config \
+            zlib1g-dev libncurses5-dev libncursesw5-dev libtinfo5 cmake \
+            libffi-dev libssl-dev
+
+      - name: Install Buildozer and Cython
+        run: |
+          python3 -m pip install --upgrade pip
+          python3 -m pip install --upgrade buildozer cython
 
       - name: Build with Buildozer
-        uses: ArtemSBulgakov/buildozer-action@v1
-        id: buildozer
-        with:
-          workdir: apk_build
-          buildozer_version: stable
+        working-directory: apk_build
+        run: buildozer android debug
 
       - name: Upload APK Artifact
         uses: actions/upload-artifact@v4
         with:
           name: HackerLocker-Android-APK
-          path: ${{ steps.buildozer.outputs.filename }}
+          path: apk_build/bin/*.apk
