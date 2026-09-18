@@ -1,0 +1,15 @@
+# Python
+__pycache__/
+*.py[cod]
+*.pyo
+
+# Buildozer / python-for-android outputs
+bin/
+build/
+.buildozer/
+
+# OS / Editor
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
