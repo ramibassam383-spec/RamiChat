@@ -40,6 +40,9 @@ android.fullscreen = 1
 # (list) Permissions
 # android.permissions = INTERNET,VIBRATE
 
+# (bool) Automatically accept the Android SDK licenses (needed for CI builds)
+android.accept_sdk_license = True
+
 # (int) Target Android API, should be as high as possible.
 android.api = 33
 
